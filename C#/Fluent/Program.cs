@@ -7,6 +7,17 @@ namespace Fluent
     {
         static async Task Main(string[] args)
         {
+            FluentBlobTransfer
+                .Connect("storageAccountConnectionString")
+                .OnBlob("blobName")
+                .Download("fileName")
+                .ToFile(@"D:\Azure\Downloads\");
+
+            await FluentBlobTransfer
+                .Connect("storageAccountConnectionString")
+                .OnBlob("blobName")
+                .Upload("fileName")
+                .FromStreamAsync(null);
         }
     }
 }
