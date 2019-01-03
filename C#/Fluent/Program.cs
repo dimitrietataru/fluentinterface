@@ -1,4 +1,6 @@
 ﻿using Fluent.BlobTransfer;
+using Fluent.Report;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Fluent
@@ -18,6 +20,17 @@ namespace Fluent
                 .OnBlob("blobName")
                 .Upload("fileName")
                 .FromStreamAsync(null);
+
+            var report = FluentReport
+                .Pdf()
+                .WithItems(new List<int> { 1, 2, 3 })
+                .Generate();
+
+            var asyncReport = await FluentReport
+                .Xml()
+                .WithFilteredItems(new List<int> { 1, 2, 3 })
+                .ByMaximumThreshold(3)
+                .GenerateAsync();
         }
     }
 }
