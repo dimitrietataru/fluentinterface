@@ -12,7 +12,7 @@ namespace Fluent.Security
 
         public static ITextPlain Encrypt() => new FluentSecurity(ActionType.Encrypt);
 
-        public static ITextCipher Decrypt() => new FluentSecurity(ActionType.Encrypt);
+        public static ITextCipher Decrypt() => new FluentSecurity(ActionType.Decrypt);
 
         public ISecurityAlgorithm PlainText(string text)
         {

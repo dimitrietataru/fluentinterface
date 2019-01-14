@@ -49,17 +49,24 @@ namespace Fluent.Security
             return this;
         }
 
-        public string Execute()
+        public string ExecuteEncrypt(out RSAParameters privateKey)
         {
-            switch (actionType)
+            if (actionType is ActionType.Encrypt)
             {
-                case ActionType.Encrypt:
-                    return Encrypt(out RSAParameters privateKey);
-                case ActionType.Decrypt:
-                    return Decrypt();
-                default:
-                    throw new InvalidOperationException();
+                return Encrypt(out privateKey);
             }
+
+            throw new InvalidOperationException();
+        }
+
+        public string ExecuteDecrypt()
+        {
+            if (actionType is ActionType.Decrypt)
+            {
+                return Decrypt();
+            }
+
+            throw new InvalidOperationException();
         }
 
         private string Encrypt(out RSAParameters privateKey)

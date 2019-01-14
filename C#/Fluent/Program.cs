@@ -1,7 +1,6 @@
 ﻿using Fluent.BlobTransfer;
 using Fluent.Report;
 using Fluent.Security;
-using Fluent.Security.Enums;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -35,33 +34,41 @@ namespace Fluent
                 .ByMaximumThreshold(3)
                 .GenerateAsync();
 
-            FluentSecurity
+            var encryptedAes = FluentSecurity
                 .Encrypt()
                 .PlainText("plainText")
                 .UsingAes()
                 .WithKey("securityKey")
-                .WithCipherMode(CipherMode.CBC)
-                .WithPaddingMode(PaddingMode.ISO10126)
+                .WithCipherMode(CipherMode.ECB)
+                .WithPaddingMode(PaddingMode.ANSIX923)
                 .Execute();
 
-            FluentSecurity
+            var decryptedAes = FluentSecurity
+                .Decrypt()
+                .CipherText(encryptedAes)
+                .UsingAes()
+                .WithKey("securityKey")
+                .WithCipherMode(CipherMode.ECB)
+                .WithPaddingMode(PaddingMode.ANSIX923)
+                .Execute();
+
+            var encryptedRsa = FluentSecurity
                 .Encrypt()
                 .PlainText("plainText")
                 .UsingRsa()
-                .WithKey(default)
+                .WithKey()
                 .WithKeySize(2048)
-                .Execute();
+                .WithPadding(RSAEncryptionPadding.Pkcs1)
+                .ExecuteEncrypt(out RSAParameters privateKey);
 
-            FluentAes
-                .Initialize(ActionType.Encrypt, "plainText")
-                .WithKey("")
-                .Execute();
-
-            FluentRsa
-                .Initialize(ActionType.Encrypt, "plainText")
-                .WithKey(default)
+            var decryptedRsa = FluentSecurity
+                .Decrypt()
+                .CipherText(encryptedRsa)
+                .UsingRsa()
+                .WithKey(privateKey)
                 .WithKeySize(2048)
-                .Execute();
+                .WithPadding(RSAEncryptionPadding.Pkcs1)
+                .ExecuteDecrypt();
         }
     }
 }

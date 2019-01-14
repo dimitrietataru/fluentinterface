@@ -1,7 +1,10 @@
-﻿namespace Fluent.Security.Interfaces
+﻿using System.Security.Cryptography;
+
+namespace Fluent.Security.Interfaces
 {
     public interface IRsaExecute
     {
-        string Execute();
+        string ExecuteEncrypt(out RSAParameters privateKey);
+        string ExecuteDecrypt();
     }
 }

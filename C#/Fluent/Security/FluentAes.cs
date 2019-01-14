@@ -19,8 +19,8 @@ namespace Fluent.Security
             this.actionType = actionType;
             this.text = text;
 
-            cipherMode = CipherMode.CBC;
-            paddingMode = PaddingMode.None;
+            cipherMode = CipherMode.ECB;
+            paddingMode = PaddingMode.PKCS7;
         }
 
         public static IAesKey Initialize(ActionType action, string text)
